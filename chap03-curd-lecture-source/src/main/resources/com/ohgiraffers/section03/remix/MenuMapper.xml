@@ -2,21 +2,16 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="MenuMapper">
+<!-- MenuMapper Interface와 MenuMapper.xml 설정파일을 연동 하고싶다.
+ 1. DA) 인터페이스와 동일한 패키지에 위치해야한다.
+ 2. DAO 인터페이스의 풀네임을 namespace로 지정해야 한다.
+ 3. DAO 인터페이스와 XML의 이름이 동일해야한다.
+ 4. 작성한 메소드의 이름과 id가 일치하고, 리턴 타입이 일치하는 쿼리문을 모두 작성해야함. -->
+<mapper namespace="com.ohgiraffers.section03.remix.MenuMapper">
     <!-- 조회한 컬럼과 DTO의 필드를 Mapping(연결) 시키기 위한 설정으로 resultMap을 사용
         Mybatis를 통해 자동 Mapping(연결)을 하기 위해서 MenuDTO에는 기본생성자, setter 메소드가 생성 되어 있어야 한다.(없으면 생성해서 동작) -->
-    <resultMap id="menuResultMap" type="com.ohgiraffers.section01.xmlconfig.MenuDTO">
-          <!-- id 태그는 pk에 해당하는 컬럼을 작성 -->
-        <id property="menuCode" column="menu_code"/>
-        <!-- result 태그는pk 외의 일반 컬럼을 작성 -->
-        <!-- DTO에 생성한 클래스 필드명고 일치해야함 -->
-        <result property="menuName" column="menu_name"/>
-        <result property="menuPrice" column="menu_price"/>
-        <result property="categoryCode" column="category_code"/>
-        <result property="orderableStatus" column="orderable_status"/>
-    </resultMap>
     <!-- id를 변경했다면 ( DAO파일안에 => mapper namespace = 이름. select id = 이름 ) 작성  -->
-    <select id="selectAllMenu" resultMap="menuResultMap">
+    <select id="selectAllMenu" resultType="com.ohgiraffers.section03.remix.MenuDTO">
         SELECT
             menu_code,
             menu_name,
@@ -33,7 +28,7 @@
     <!-- 조회 시 전달 되는 파라미터가 있다면 parameterType 속성을 통해 명시할 수 있다.
       Mabatis에서 사용하는 자바 타입에 대한 별칭을 사용할 수 있다.
       꼭 작성하지 않아도 동작은 잘 되지만, 명시적으로 표기해줄수 있다. -->
-    <select id="selectMenuByMenuCode" parameterType="_int" resultMap="menuResultMap">
+    <select id="selectMenuByMenuCode" parameterType="_int" resultType="com.ohgiraffers.section03.remix.MenuDTO">
         SELECT
             menu_code,
             menu_name,
@@ -51,14 +46,14 @@
     </select>
     <!-- 파라미터로 전달 된 객체의 필드명으로 값을 바인딩 한다. ex) #{ menuName }
     insert, update, delete의 경우 resultType 또는 resultMap 속성은 작성하지 않으며 기본 _int값으로 수행 결과를 반환. -->
-    <select id="insertMenu" parameterType="com.ohgiraffers.section01.xmlconfig.MenuDTO">
+    <select id="insertMenu" parameterType="_int" resultType="com.ohgiraffers.section03.remix.MenuDTO">
         INSERT INTO
             tbl_menu (menu_name, menu_price, category_code, orderable_status)
         VALUES
         <!-- 여러개 일때는 필드명으로 작성 -->
             (#{ menuName }, #{ menuPrice }, #{ categoryCode }, 'Y')
     </select>
-    <select id="updateMenu" parameterType="com.ohgiraffers.section01.xmlconfig.MenuDTO">
+    <select id="updateMenu" parameterType="_int" resultType="com.ohgiraffers.section03.remix.MenuDTO">
         UPDATE
             tbl_menu
         SET
@@ -68,7 +63,7 @@
         WHERE
             menu_code = #{ menuCode }
     </select>
-    <select id="deleteMenu" parameterType="com.ohgiraffers.section01.xmlconfig.MenuDTO">
+    <select id="deleteMenu" resultType="com.ohgiraffers.section03.remix.MenuDTO">
         DELETE
         FROM
             tbl_menu
