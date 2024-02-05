@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+    <properties resource="config/connection-info.properties"/>
+    <settings>
+        <!-- 자동으로  -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+<environments default="dev">
+<environment id="dev">
+    <!-- type : JDBC(수동 커밋) 또는 MANAGED(자동 커밋) 선택 -->
+    <transactionManager type="JDBC"/>
+    <!-- type : POOLED(커넥션풀 사용) 또는 UnPOOLED(커넥션풀 미사용) 선택 -->
+    <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+    </dataSource>
+</environment>
+</environments>
+    <!-- 주석을 지우고 mybatis 설정 파일 내용을 작성하세요. -->
+<mappers>
+    <mapper resource="com/management/product/model/dao/ProductDAO.xml"/>
+</mappers>
+</configuration>
